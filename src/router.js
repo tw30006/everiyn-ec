@@ -2,13 +2,43 @@ import { createWebHistory, createRouter } from 'vue-router'
 import Login from './views/dashboard/Login.vue'
 import Dashboard from './views/dashboard/Dashboard.vue'
 import Product from './views/dashboard/Product.vue'
-import Order from './views/dashboard/Order.vue'
+import AdminOrder from './views/dashboard/Order.vue'
 import Coupon from './views/dashboard/Coupon.vue'
-import Article from './views/dashboard/article.vue'
+import Article from './views/dashboard/Article.vue'
+import AllProduct from './views/User/AllProduct.vue'
+import Cart from './views/User/Cart.vue'
+import About from './views/User/About.vue'
+import Payment from './views/User/Payment.vue'
+import Information from './views/User/Information.vue'
 
 const routes = [
   {
     path: '/',
+    children: [
+      {
+        path: 'allproduct',
+        component: AllProduct,
+      },
+      {
+        path: 'cart',
+        component: Cart,
+        children: [
+          {
+            path: 'information',
+            component: Information,
+          },
+          {
+            path: 'payment',
+            component: Payment,
+          },
+        ],
+      },
+      {
+        path: 'about',
+        component: About,
+      },
+      
+    ],
   },
   {
     path: '/login',
@@ -24,7 +54,7 @@ const routes = [
       },
       {
         path: 'order',
-        component: Order,
+        component: AdminOrder,
       },
       {
         path: 'coupon',
