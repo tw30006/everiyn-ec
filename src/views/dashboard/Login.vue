@@ -37,7 +37,7 @@ async function checkLogin() {
   try {
     const token = document.cookie
       .split(';')
-      .map(c => c.trim())
+      .map((c) => c.trim())
       .find((c) => c.startsWith('eveyiynToken='))
       ?.split('=')[1]
 
@@ -67,9 +67,9 @@ async function checkLogin() {
 </script>
 
 <template>
-  <div class="flex items-center justify-center h-screen">
+  <div class="flex justify-center translate-y-1/2">
     <section
-      class="w-[400px] border border-blue-900 rounded-md p-8 flex flex-col gap-8"
+      class="w-[400px] border border-blue-900 rounded-md p-8 flex flex-col gap-8 bg-white"
     >
       <h1 class="text-2xl font-bold text-center text-blue-900">管理者登入</h1>
       <div class="flex flex-col gap-4">
