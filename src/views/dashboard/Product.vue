@@ -239,6 +239,6 @@ onMounted(() => {
     :product="tempProduct"
     :isShowDeleteModal="isShowDeleteModal"
     @close-modal="isShowDeleteModal = false"
-    @delete-product="deleteProduct"
+    @delete-item="deleteProduct"
   />
 </template>

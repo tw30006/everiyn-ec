@@ -1,5 +1,5 @@
 <script setup>
-const emit = defineEmits(['close-modal', 'delete-product'])
+const emit = defineEmits(['close-modal', 'delete-item'])
 const props = defineProps({
   isShowDeleteModal: {
     type: Boolean,
@@ -18,7 +18,7 @@ const props = defineProps({
       class="w-[330px] h-[150px] rounded-md mx-auto bg-[#ffffff] flex flex-col justify-between absolute inset-50"
     >
       <h2 class="text-xl text-white bg-red-700 rounded-t-md p-2 text-center">
-        刪除品項
+        是否刪除
       </h2>
       <p class="text-xl text-center">確定刪除 {{ product.title }} 嗎？</p>
       <div class="flex justify-end gap-2 p-2">
@@ -32,7 +32,7 @@ const props = defineProps({
         <button
           type="button"
           class="bg-red-700 px-3 py-1 text-white rounded-sm"
-          @click="emit('delete-product', product)"
+          @click="emit('delete-item', product)"
         >
           確定
         </button>
