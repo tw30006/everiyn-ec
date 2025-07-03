@@ -1,13 +1,14 @@
 <script setup>
-import { ref,onMounted } from 'vue';
-import CoupenModal from '../../components/CoupenModal.vue';
-const isCouponModal = ref(false);
-const tempCoupon = ref({});
-const coupons = ref([]);
-const isNewCoupon = ref(null);
+import { ref, onMounted } from 'vue'
+import CoupenModal from '../../components/CoupenModal.vue'
+import DeleteModal from '../../components/DeleteModal.vue'
+const isCouponModal = ref(false)
+const tempCoupon = ref({})
+const coupons = ref([])
+const isNewCoupon = ref(null)
+const isShowDeleteModal = ref(false)
 const apiUrl = import.meta.env.VITE_APP
 const apiPath = import.meta.env.VITE_APP_PATH
-
 
 const token = document.cookie
   .split(';')
@@ -15,18 +16,23 @@ const token = document.cookie
   .find((c) => c.startsWith('eveyiynToken='))
   ?.split('=')[1]
 
-function openCouponModal(isNew,item) {
-  if(isNew){
+function openCouponModal(isNew, item) {
+  if (isNew) {
     tempCoupon.value = {}
-  }else {
-    tempCoupon.value = {...item}
+  } else {
+    tempCoupon.value = { ...item }
   }
-  isNewCoupon.value = isNew;
-  isCouponModal.value = true;
+  isNewCoupon.value = isNew
+  isCouponModal.value = true
+}
+
+function openDeleteModal(item) {
+  tempCoupon.value = { ...item }
+  isShowDeleteModal.value = true
 }
 
 async function getCoupons() {
-  try{
+  try {
     const res = await fetch(`${apiUrl}api/${apiPath}/admin/coupons`, {
       method: 'GET',
       headers: {
@@ -35,81 +41,100 @@ async function getCoupons() {
     })
     const data = await res.json()
     console.log(data)
-    if(data.success){
+    if (data.success) {
       coupons.value = data.coupons
-    }else {
+    } else {
       console.log(data.message)
     }
-  }catch(error){
-    console.log(error);
+  } catch (error) {
+    console.log(error)
   }
 }
 
 async function addCoupon() {
-  try{
+  try {
     const res = await fetch(`${apiUrl}api/${apiPath}/admin/coupon`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
       },
-      body: JSON.stringify({data:tempCoupon.value}),
+      body: JSON.stringify({ data: tempCoupon.value }),
     })
     const data = await res.json()
     console.log(data)
-    if(data.success){
+    if (data.success) {
       coupons.value = data.data
       console.log('更新成功')
-      isCouponModal.value = false;
+      isCouponModal.value = false
       await getCoupons()
-    }else {
+    } else {
       console.log(data.message)
     }
-  }catch(error){
-    console.log(error);
+  } catch (error) {
+    console.log(error)
   }
 }
 
 async function editCoupon(item) {
-  try{
+  try {
     const res = await fetch(`${apiUrl}api/${apiPath}/admin/coupon/${item.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
       },
-      body: JSON.stringify({data:item}),
+      body: JSON.stringify({ data: item }),
     })
     const data = await res.json()
     console.log(data)
-    if(data.success){
-      isCouponModal.value = false;
+    if (data.success) {
+      isCouponModal.value = false
       await getCoupons()
       console.log('更新成功')
-    }else {
+    } else {
       console.log(data.message)
     }
-  }catch(error){
-    console.log(error);
+  } catch (error) {
+    console.log(error)
   }
 }
 
-
-
 function updateCoupon(item) {
-  tempCoupon.value = {...item}
-  if(!isNewCoupon.value){
+  tempCoupon.value = { ...item }
+  if (!isNewCoupon.value) {
     editCoupon(tempCoupon.value)
-  }else {
+  } else {
     addCoupon()
   }
-  isCouponModal.value = false;
+  isCouponModal.value = false
+}
+
+async function deleteCoupon(item) {
+  try {
+    const res = await fetch(`${apiUrl}api/${apiPath}/admin/coupon/${item.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `${token}`,
+      },
+    })
+    const data = await res.json()
+
+    if (data.success) {
+      console.log('刪除成功')
+      isShowDeleteModal.value = false
+      await getCoupons()
+    } else {
+      console.log('刪除失敗')
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 onMounted(() => {
   getCoupons()
 })
-
 </script>
 
 <template>
@@ -119,7 +144,7 @@ onMounted(() => {
         type="button"
         class="px-3 py-3 bg-sky-700 hover:bg-sky-600 text-white text-xl rounded-md leading-none"
         @click="openCouponModal(true)"
-        >
+      >
         新增折價券
       </button>
     </div>
@@ -137,7 +162,7 @@ onMounted(() => {
           <th class="text-center">操作</th>
         </tr>
       </thead>
-      <tbody  v-for="coupon in coupons" :key="coupon.id">
+      <tbody v-for="coupon in coupons" :key="coupon.id">
         <tr class="grid grid-cols-6 py-4 px-4 border-b border-gray-200 text-lg">
           <td class="text-gray-800 font-medium flex items-center">
             {{ coupon.title }}
@@ -146,23 +171,28 @@ onMounted(() => {
             <span class="text-blue-800">{{ coupon.code }}</span>
           </td>
           <td class="flex items-center">
-            <span class="text-red-600 font-bold text-lg">{{ coupon.percent }}%</span>
-          </td>
-          <td class="text-gray-600 flex items-center">{{ coupon.due_date }}</td>
-          <td class="flex items-center">
-            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full"
-              >{{ coupon.is_enabled ? '使用中' : '已停用' }}</span
+            <span class="text-red-600 font-bold text-lg"
+              >{{ coupon.percent }}%</span
             >
+          </td>
+          <td class="text-gray-600 flex items-center">
+            {{ new Date(coupon.due_date * 1000).toLocaleDateString('zh-TW') }}
+          </td>
+          <td class="flex items-center">
+            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">{{
+              coupon.is_enabled ? '使用中' : '已停用'
+            }}</span>
           </td>
           <td class="flex justify-center items-center gap-3">
             <button
               class="bg-teal-700 hover:bg-teal-600 text-white px-3 py-2 rounded-lg transition-colors duration-200 flex items-center"
-              @click="openCouponModal(false,coupon)"
+              @click="openCouponModal(false, coupon)"
             >
               <span>編輯</span>
             </button>
             <button
               class="bg-red-700 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors duration-200 flex items-center"
+              @click="openDeleteModal(coupon)"
             >
               <span>刪除</span>
             </button>
@@ -171,8 +201,16 @@ onMounted(() => {
       </tbody>
     </table>
   </section>
-  <CoupenModal :couponList="tempCoupon" :isCouponModal="isCouponModal" @close-coupon-modal="isCouponModal = false" @update-coupon="updateCoupon" 
+  <CoupenModal
+    :couponList="tempCoupon"
+    :isCouponModal="isCouponModal"
+    @close-coupon-modal="isCouponModal = false"
+    @update-coupon="updateCoupon"
+  />
+  <DeleteModal
+    :product="tempCoupon"
+    :isShowDeleteModal="isShowDeleteModal"
+    @close-modal="isShowDeleteModal = false"
+    @delete-item="deleteCoupon"
   />
 </template>
-
-
