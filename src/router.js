@@ -10,6 +10,7 @@ import Cart from './views/User/Cart.vue'
 import About from './views/User/About.vue'
 import Payment from './views/User/Payment.vue'
 import Information from './views/User/Information.vue'
+import CheckOrder from './views/User/CheckOrder.vue'
 
 const routes = [
   {
@@ -34,10 +35,13 @@ const routes = [
         ],
       },
       {
+        path: 'checkorder/:orderId',
+        component: CheckOrder,
+      },
+      {
         path: 'about',
         component: About,
       },
-      
     ],
   },
   {

@@ -1,14 +1,16 @@
 <script setup>
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 
 const route = useRoute()
+const router = useRouter()
 
 const cartlist = ref({
   carts: [],
   total: 0,
   final_total: 0,
 })
+const userData = ref({})
 
 const apiUrl = import.meta.env.VITE_APP
 const apiPath = import.meta.env.VITE_APP_PATH
@@ -117,24 +119,66 @@ async function deleteAll() {
     console.log(error)
   }
 }
+async function checkOrder() {
+  console.log(userData.value.userInfo.name)
+  if (!userData.value) {
+    console.log('請先填寫訂單資料')
+    return
+  }
+  try {
+    const res = await fetch(`${apiUrl}api/${apiPath}/order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          user: {
+            name: userData.value.userInfo.name,
+            email: userData.value.userInfo.email,
+            tel: userData.value.userInfo.phone,
+            address: userData.value.userInfo.address,
+          },
+          message: userData.value.message || '這是留言',
+        },
+      }),
+    })
+    const data = await res.json()
+    if (data.success) {
+      console.log(data.message)
+      router.push(`/checkorder/${data.orderId}`)
+    } else {
+      console.log(data.message)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 function handleCoupon(coupon) {
   cartlist.value.final_total = coupon.final_total
   getCartList()
 }
+function handleUserInfo(orderData) {
+  userData.value = orderData
+  console.log(userData.value)
+}
 
+// const buttonText = computed(() => {
+//   if (route.path === '/cart') {
+//     return '下一步'
+//   } else if (route.path === '/cart/information') {
+//     return '確認訂單'
+//   }
+// })
 
-const buttonText = computed(() => {
-  return route.path === '/cart/information' ? '前往付款' : '下一步'
-})
-
-// 根據路由決定要跳轉的頁面
-const buttonLink = computed(() => {
-  return route.path === '/cart/information' ? '/cart/payment' : '/cart/information'
-})
-
-
-
+// const buttonLink = computed(() => {
+//   if (route.path === '/cart') {
+//     return '/cart/information'
+//   } else if (route.path === '/cart/information') {
+//     return '/cart/payment'
+//   }
+// })
 
 onMounted(() => {
   getCartList()
@@ -263,19 +307,24 @@ onMounted(() => {
         </div>
       </div>
       <div class="col-span-2">
-        <RouterView @handle-coupon="handleCoupon" />
+        <RouterView
+          @handle-coupon="handleCoupon"
+          @update-user-info="handleUserInfo"
+          :userInfo="userData"
+        />
       </div>
       <!-- 右側結帳區域 -->
       <div class="col-span-1 fixed right-[18%] top-[20.5%]">
         <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
           <h2 class="font-bold text-2xl mb-4">訂單明細</h2>
-          <div
-            class="flex justify-between items-center mb-4  text-gray-600"
-          >
+          <div class="flex justify-between items-center mb-4 text-gray-600">
             <span> {{ cartlist.carts.length }} 個品項小計</span>
             <span>NT$ {{ cartlist.total }}</span>
           </div>
-          <div class="flex justify-between items-center text-red-500 mb-4" v-if="cartlist.final_total < cartlist.total">
+          <div
+            class="flex justify-between items-center text-red-500 mb-4"
+            v-if="cartlist.final_total < cartlist.total"
+          >
             <span>已套用優惠券</span>
             <span>現折NT$ {{ cartlist.total - cartlist.final_total }}</span>
           </div>
@@ -285,18 +334,25 @@ onMounted(() => {
               <span class="text-2xl font-bold text-gray-900"
                 >NT$ {{ cartlist.final_total }}</span
               >
-              
             </div>
           </div>
 
-          <router-link :to="buttonLink">
+          <router-link to="/cart/information" v-if="route.path === '/cart'">
             <button
               class="w-full bg-blue-900 hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
             >
-              {{ buttonText }}
+              下一步
             </button>
           </router-link>
-          
+          <button
+            v-if="route.path === '/cart/information'"
+            type="button"
+            class="w-full bg-blue-900 hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
+            @click="checkOrder()"
+          >
+            確認付款
+          </button>
+
           <p class="text-xs text-gray-500 leading-relaxed">
             確認購買即表示您已審閱 Everiyn
             所提供之購物相關條款，並同意條款內容。

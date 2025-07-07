@@ -1,12 +1,11 @@
 <script setup>
 import twCities from '@/assets/tw-cities.json'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 const cityOptions = ref([])
 const districtOptions = ref([])
 const selectedCity = ref('')
 const selectedDistrict = ref('')
 const couponCode = ref('')
-const selectedPayment = ref('credit')
 const apiUrl = import.meta.env.VITE_APP
 const apiPath = import.meta.env.VITE_APP_PATH
 const userInfo = ref({
@@ -17,6 +16,40 @@ const userInfo = ref({
   message: '',
 })
 
+const emit = defineEmits(['update-user-info', 'handle-coupon'])
+
+function emitUserInfo() {
+  const orderData = {
+    userInfo: {
+      name: userInfo.value.name,
+      phone: userInfo.value.phone,
+      email: userInfo.value.email,
+      address: userInfo.value.address,
+    },
+    message: userInfo.value.message,
+  }
+  emit('update-user-info', orderData)
+}
+
+watch(
+  userInfo,
+  () => {
+    emitUserInfo()
+  },
+  { deep: true }
+)
+const getFullAdress = computed(() => {
+  console.log(selectedCity.value)
+  console.log(selectedDistrict.value)
+  if (selectedCity.value && selectedDistrict.value) {
+    return `${selectedCity.value}${selectedDistrict.value}`
+  }
+  return ''
+})
+
+watch(getFullAdress, (newAddress) => {
+  userInfo.value.address = newAddress
+})
 
 async function checkCoupen(couponCode) {
   console.log(couponCode)
@@ -44,7 +77,6 @@ async function checkCoupen(couponCode) {
   }
 }
 
-
 function getDistricts(cityName) {
   const city = cityOptions.value.find((city) => city.name === cityName)
   console.log(city)
@@ -55,8 +87,6 @@ function getDistricts(cityName) {
     districtOptions.value = []
   }
 }
-
-
 
 watch(selectedCity, (newVal) => {
   getDistricts(newVal)
@@ -72,7 +102,7 @@ onMounted(() => {
     <div
       class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 flex flex-col gap-2"
     >
-      <label for="coupon" class="text-lg font-bold" >請輸入優惠券代碼</label>
+      <label for="coupon" class="text-lg font-bold">請輸入優惠券代碼</label>
       <div class="flex items-center gap-2 relative">
         <input
           v-model="couponCode"
@@ -101,8 +131,7 @@ onMounted(() => {
               >收件人</label
             >
             <input
-            v-model="userInfo.name"
-            
+              v-model="userInfo.name"
               type="text"
               id="name"
               class="w-full p-2 border border-gray-300 rounded-md"
@@ -116,8 +145,7 @@ onMounted(() => {
               >收件人電話</label
             >
             <input
-            v-model="userInfo.phone"
-            
+              v-model="userInfo.phone"
               type="text"
               id="phone"
               class="w-full p-2 border border-gray-300 rounded-md"
@@ -132,8 +160,7 @@ onMounted(() => {
             >Email</label
           >
           <input
-          v-model="userInfo.email"
-          
+            v-model="userInfo.email"
             type="email"
             id="email"
             class="w-full p-2 border border-gray-300 rounded-md"
@@ -154,7 +181,6 @@ onMounted(() => {
                 v-model="selectedCity"
               >
                 <option
-                
                   v-for="city in cityOptions"
                   :key="city.name"
                   :value="city.name"
@@ -180,7 +206,6 @@ onMounted(() => {
                 v-model="selectedDistrict"
               >
                 <option
-                
                   v-for="district in districtOptions"
                   :key="district"
                   :value="district"
@@ -203,7 +228,6 @@ onMounted(() => {
 
           <input
             v-model="userInfo.address"
-            
             type="text"
             id="address"
             class="w-full p-2 border border-gray-300 rounded-md"
@@ -211,19 +235,16 @@ onMounted(() => {
           />
         </div>
         <label for="message" class="text-lg font-bold">訂單備註</label>
-      <div class="flex items-center gap-2">
-        <textarea
-        v-model="userInfo.message"
-        
-          id="message"
-          class="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="請輸入訂單備註"
-        ></textarea>
-      </div>
+        <div class="flex items-center gap-2">
+          <textarea
+            v-model="userInfo.message"
+            id="message"
+            class="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="請輸入訂單備註"
+          ></textarea>
+        </div>
       </div>
     </div>
-    
-    
   </section>
 </template>
 
