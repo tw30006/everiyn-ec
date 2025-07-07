@@ -67,7 +67,7 @@ async function checkLogin() {
 </script>
 
 <template>
-  <div class="flex justify-center translate-y-1/2">
+  <div class="flex justify-center">
     <section
       class="w-[400px] border border-blue-900 rounded-md p-8 flex flex-col gap-8 bg-white"
     >
