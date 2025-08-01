@@ -10,3 +10,6 @@ img {
   height: auto;
   vertical-align: middle;
 }
+@theme {
+  --color-primary: #3a5875;
+}

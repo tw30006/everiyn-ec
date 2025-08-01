@@ -2,4 +2,5 @@
   <h1>訂單列表</h1>
 </template>
 
-<script setup></script>
+<script setup>
+</script>

@@ -62,7 +62,7 @@ watch(
     <section class="max-w-[1200px] mx-auto absolute inset-15 z-100">
       <div class="bg-white rounded-lg">
         <h2
-          class="text-center text-2xl text-white bg-blue-900 py-3 rounded-t-md"
+          class="text-center text-2xl text-white bg-primary py-3 rounded-t-md"
         >
           新增產品
         </h2>

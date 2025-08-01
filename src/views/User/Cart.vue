@@ -190,7 +190,7 @@ onMounted(() => {
     <ul class="flex items-center justify-center gap-5 mb-10">
       <li class="flex gap-2 items-center">
         <span
-          class="w-[36px] h-[36px] rounded-full bg-blue-900 text-white text-xl flex items-center justify-center"
+          class="w-[36px] h-[36px] rounded-full bg-primary text-white text-xl flex items-center justify-center"
           >1</span
         >
         <p class="">確認訂單</p>
@@ -234,7 +234,7 @@ onMounted(() => {
             <i class="bi bi-trash3"></i>
           </button>
         </div>
-        <!-- 商品項目 1 -->
+
         <ul class="flex flex-col">
           <li
             class="flex items-center gap-4 py-4 border-t border-gray-200"
@@ -294,27 +294,7 @@ onMounted(() => {
           </li>
         </ul>
       </div>
-
-      <div
-        class="col-span-2 bg-white rounded-lg shadow-sm p-6 border border-gray-200 flex flex-col items-center justify-center"
-        v-else
-      >
-        <div class="flex flex-col items-center justify-center gap-4">
-          <p>購物車還沒有商品，立即逛逛！</p>
-          <button class="bg-blue-900 text-lg text-white px-6 py-3 rounded-lg">
-            前往商品頁
-          </button>
-        </div>
-      </div>
-      <div class="col-span-2">
-        <RouterView
-          @handle-coupon="handleCoupon"
-          @update-user-info="handleUserInfo"
-          :userInfo="userData"
-        />
-      </div>
-      <!-- 右側結帳區域 -->
-      <div class="col-span-1 fixed right-[18%] top-[20.5%]">
+      <div class="col-span-1">
         <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
           <h2 class="font-bold text-2xl mb-4">訂單明細</h2>
           <div class="flex justify-between items-center mb-4 text-gray-600">
@@ -339,7 +319,7 @@ onMounted(() => {
 
           <router-link to="/cart/information" v-if="route.path === '/cart'">
             <button
-              class="w-full bg-blue-900 hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
+              class="w-full bg-primary hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
             >
               下一步
             </button>
@@ -347,7 +327,7 @@ onMounted(() => {
           <button
             v-if="route.path === '/cart/information'"
             type="button"
-            class="w-full bg-blue-900 hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
+            class="w-full bg-primary hover:bg-sky-200 hover:text-gray-800 text-white text-xl font-medium py-3 px-6 rounded-lg transition-colors mb-4"
             @click="checkOrder()"
           >
             確認付款
@@ -359,6 +339,25 @@ onMounted(() => {
           </p>
         </div>
       </div>
+      <div
+        class="col-span-2 bg-white rounded-lg shadow-sm p-6 border border-gray-200 flex flex-col items-center justify-center"
+        v-if="cartlist.carts.length == 0"
+      >
+        <div class="flex flex-col items-center justify-center gap-4">
+          <p>購物車還沒有商品，立即逛逛！</p>
+          <button class="bg-primary text-lg text-white px-6 py-3 rounded-lg">
+            前往商品頁
+          </button>
+        </div>
+      </div>
+      <div class="col-span-2">
+        <RouterView
+          @handle-coupon="handleCoupon"
+          @update-user-info="handleUserInfo"
+          :userInfo="userData"
+        />
+      </div>
+      <!-- 右側結帳區域 -->
     </section>
   </div>
 </template>

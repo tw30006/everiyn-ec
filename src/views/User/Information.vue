@@ -113,7 +113,7 @@ onMounted(() => {
         />
         <button
           type="button"
-          class="bg-blue-900 text-white hover:bg-sky-200 hover:text-gray-800 px-4 py-2 rounded-r-md whitespace-nowrap absolute right-0 cursor-pointer cursor-pointer"
+          class="bg-primary text-white hover:bg-sky-200 hover:text-gray-800 px-4 py-2 rounded-r-md whitespace-nowrap absolute right-0 cursor-pointer cursor-pointer"
           @click="checkCoupen(couponCode)"
         >
           確認

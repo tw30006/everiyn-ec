@@ -6,7 +6,6 @@ const apiUrl = import.meta.env.VITE_APP
 
 const apiPath = import.meta.env.VITE_APP_PATH
 
-
 async function getProducts() {
   try {
     const res = await fetch(`${apiUrl}api/${apiPath}/products`, {
@@ -24,26 +23,26 @@ async function getProducts() {
 
 async function addToCart(product) {
   console.log(product.qty)
-  try{
-    const res = await fetch(`${apiUrl}api/${apiPath}/cart`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
+  try {
+    const res = await fetch(`${apiUrl}api/${apiPath}/cart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body:JSON.stringify({
-        data:{
-          product_id:product.id,
-          qty:1
-        }
-      })
+      body: JSON.stringify({
+        data: {
+          product_id: product.id,
+          qty: 1,
+        },
+      }),
     })
     const data = await res.json()
-    if(data.success){
+    if (data.success) {
       console.log(data.message)
-    }else{
+    } else {
       console.log(data.message)
     }
-  }catch(error){
+  } catch (error) {
     console.log(error)
   }
 }
@@ -79,7 +78,7 @@ onMounted(() => {
             </p>
             <button
               type="button"
-              class="p-2 bg-blue-900 hover:bg-sky-200 rounded-sm text-white"
+              class="p-2 bg-primary hover:bg-sky-200 rounded-sm text-white"
               @click="addToCart(product)"
             >
               加入購物車

@@ -96,7 +96,7 @@ async function checkLogin() {
       </div>
       <button
         type="button"
-        class="bg-blue-900 hover:bg-sky-700 text-white p-2 rounded-md w-full"
+        class="bg-primary hover:bg-sky-700 text-white p-2 rounded-md w-full"
         @click="login"
       >
         登入
