@@ -102,33 +102,4 @@ src/
 VITE_API_BASE_URL=your_api_url
 ```
 
-## 📦 部署
-
-專案支援多種部署方式：
-
-1. **GitHub Pages**: 使用 `npm run deploy`
-2. **Vercel**: 直接連接 GitHub 倉庫
-3. **Netlify**: 上傳 `dist` 資料夾
-
-## 🤝 貢獻指南
-
-1. Fork 專案
-2. 建立功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
-
-## 📄 授權
-
-此專案採用 MIT 授權 - 詳見 [LICENSE](LICENSE) 檔案
-
-## 📞 聯絡資訊
-
-如有任何問題或建議，請透過以下方式聯絡：
-
-- Email: your-email@example.com
-- GitHub Issues: [專案 Issues 頁面]
-
----
-
 **注意**: 這是一個開發中的專案，功能可能會持續更新。
