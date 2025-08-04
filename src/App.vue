@@ -3,7 +3,7 @@
 <template>
   <div class="flex flex-col min-h-screen">
     <header class="bg-primary p-4 text-white text-xl flex justify-between">
-      <h2><router-link to="/">hello</router-link></h2>
+      <h2><router-link to="/">Everiyn</router-link></h2>
       <ul class="flex gap-3">
         <li><router-link to="/allProduct">所有商品</router-link></li>
         <li>
@@ -19,7 +19,7 @@
         alt=""
       />
     </div> -->
-    <div class="flex-1 bg-sky-50 py-20">
+    <div class="flex-1">
       <RouterView />
     </div>
     <footer class="w-full bg-primary p-4 text-white text-center">

@@ -11,5 +11,7 @@ img {
   vertical-align: middle;
 }
 @theme {
-  --color-primary: #3a5875;
+  /* --color-primary: #3a5875; */
+  --color-primary: #5b7493;
+  --color-secondary: #b98a82;
 }

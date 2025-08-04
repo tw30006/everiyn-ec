@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Login from './views/dashboard/Login.vue'
 import Dashboard from './views/dashboard/Dashboard.vue'
+import Home from './views/User/Home.vue'
 import Product from './views/dashboard/Product.vue'
 import AdminOrder from './views/dashboard/Order.vue'
 import Coupon from './views/dashboard/Coupon.vue'
@@ -15,34 +16,33 @@ import CheckOrder from './views/User/CheckOrder.vue'
 const routes = [
   {
     path: '/',
+    component: Home,
+  },
+  {
+    path: '/allproduct',
+    component: AllProduct,
+  },
+  {
+    path: '/cart',
+    component: Cart,
     children: [
       {
-        path: 'allproduct',
-        component: AllProduct,
+        path: 'information',
+        component: Information,
       },
       {
-        path: 'cart',
-        component: Cart,
-        children: [
-          {
-            path: 'information',
-            component: Information,
-          },
-          {
-            path: 'payment',
-            component: Payment,
-          },
-        ],
-      },
-      {
-        path: 'checkorder/:orderId',
-        component: CheckOrder,
-      },
-      {
-        path: 'about',
-        component: About,
+        path: 'payment',
+        component: Payment,
       },
     ],
+  },
+  {
+    path: '/checkorder/:orderId',
+    component: CheckOrder,
+  },
+  {
+    path: '/about',
+    component: About,
   },
   {
     path: '/login',
